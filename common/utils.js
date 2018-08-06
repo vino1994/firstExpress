@@ -3,8 +3,9 @@ var sha1 = require('sha1');
 
 //检查微信签名认证中间件
 utils.sign = function (config) {
-    console.info(config)
     return function (req, res, next) {
+        console.info(1111)
+        console.info(config)
         config = config || {};
         var q = req.query;
         var token = config.wechat.token;
