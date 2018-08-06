@@ -5,9 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const config = require('config-lite')(__dirname)
+const utils = require('./common/utils')
 
 var app = express();
-
 
 //设置跨域访问
 app.all('*', function (req, res, next) {
@@ -37,6 +37,9 @@ require('./routes')(app)
 //设置模板，views 设置了模板的位置；view engine设置了要使用的模板引擎。
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+//微信签名认证
+app.use(utils.sign(config.wechat))
 
 
 // 最后处理错误的http请求
