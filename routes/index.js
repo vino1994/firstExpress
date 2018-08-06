@@ -2,7 +2,7 @@ module.exports = function (app) {
     app.get('/', function (req, res) {
         res.redirect('/users')
     })
-    
+
     app.use('/api/users', require('./users'))
     app.use('/api/wx', require('./wx'))
 
