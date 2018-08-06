@@ -13,8 +13,9 @@ router.get('/config', function (req, res) {
 });
 
 //微信将很多事件推送到此接口
-router.post('/test', function(req, res, next) {
+router.get('/test', function(req, res, next) {
     //微信得到返回后会通过你的认证
+    console.info(app)
     var query = req.query;
     res.status(200).send('wechat');
 });

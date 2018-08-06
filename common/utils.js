@@ -1,9 +1,8 @@
 var utils = {};
 var sha1 = require('sha1');
-console.info(111111)
+
 //检查微信签名认证中间件
 utils.sign = function (config) {
-    console.info('1111=====>'+JSON.stringify(config))
     return function (req, res, next) {
         config = config || {};
         var q = req.query;
