@@ -3,7 +3,7 @@ module.exports = function (app) {
         res.redirect('/users')
     })
     
-    app.use('/users', require('./users'))
+    app.use('/api/users', require('./users'))
     app.use('/wx', require('./wx'))
 
     // 404 page
