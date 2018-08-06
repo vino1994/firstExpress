@@ -2,7 +2,7 @@ const express = require('express');
 const weixin = require('weixin-api');
 const router = express.Router();
 
-//weixin
+//微信config
 router.get('/config', function (req, res) {
     // 签名成功
     if (weixin.checkSignature(req)) {
