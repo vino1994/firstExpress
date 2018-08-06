@@ -16,7 +16,6 @@ router.get('/config', function (req, res) {
 router.post('/test', function(req, res, next) {
     //微信得到返回后会通过你的认证
     var query = req.query;
-    console.log(query)
     res.status(200).send('wechat');
 });
 
