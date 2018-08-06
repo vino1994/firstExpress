@@ -1,13 +1,24 @@
 var utils = {};
 var sha1 = require('sha1');
+var request = require('request');
+var redis = require("redis");
+var client = redis.createClient();
+
+client.on("error", function (err) {
+    console.log("Error :", err);
+});
+
+client.on('connect', function () {
+    console.log('Redis连接成功.');
+})
 
 //检查微信签名认证中间件
 utils.sign = function (config) {
     return function (req, res, next) {
-        console.info(1111)
-        console.info(config)
         config = config || {};
+        console.log(config);
         var q = req.query;
+        console.log(q);
         var token = config.token;
         var signature = q.signature; //微信加密签名
         var nonce = q.nonce; //随机数
@@ -35,6 +46,62 @@ utils.sign = function (config) {
             next();
         }
     }
+};
+
+/** 
+ * 添加string类型的数据 
+ * @param key 键 
+ * @params value 值  
+ * @params expire (过期时间,单位秒;可为空，为空表示不过期) 
+ */
+utils.set = function (key, value, expire) {
+    return new Promise(function (resolve, reject) {
+        client.set(key, value, function (err, result) {
+            if (err) {
+                console.log(err);
+                reject(err);
+                return;
+            }
+
+            if (!isNaN(expire) && expire > 0) {
+                client.expire(key, parseInt(expire));
+            }
+
+            resolve(result);
+        })
+    })
+};
+
+/** 
+ * 查询string类型的数据 
+ * @param key 键 
+ */
+utils.get = function (key) {
+    return new Promise(function (resolve, reject) {
+        client.get(key, function (err, result) {
+            if (err) {
+                console.log(err);
+                reject(err);
+                return;
+            }
+            resolve(result);
+        });
+    })
+};
+
+//Promise化request
+utils.request = function (opts) {
+    opts = opts || {};
+    return new Promise(function (resolve, reject) {
+        request(opts, function (error, response, body) {
+            if (error) {
+                return reject(error);
+            }
+            resolve(body);
+        })
+
+    })
+
 };
 
 module.exports = utils;

@@ -4,8 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-const config = require('config-lite')(__dirname)
-const utils = require('./common/utils')
+const config = require('config-lite')(__dirname);
+const utils = require('./common/utils');
 
 var app = express();
 
