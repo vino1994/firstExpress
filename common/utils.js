@@ -8,7 +8,7 @@ utils.sign = function (config) {
         console.info(config)
         config = config || {};
         var q = req.query;
-        var token = config.wechat.token;
+        var token = config.token;
         var signature = q.signature; //微信加密签名
         var nonce = q.nonce; //随机数
         var timestamp = q.timestamp; //时间戳
