@@ -4,6 +4,7 @@ module.exports = function (app) {
     })
     
     app.use('/users', require('./users'))
+    app.use('/wx', require('./wx'))
 
     // 404 page
     app.use(function (req, res) {
