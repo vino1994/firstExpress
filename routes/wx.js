@@ -5,6 +5,7 @@ const utils = require('../common/utils');
 var config = require('../config/default');
 const wechatapi = require('../common/wechatapi');
 const xml2js = require('xml2js');
+const sha1 = require('sha1');
 
 //获取,验证access_token,存入redis中
 router.use(function (req, res, next) {
@@ -22,7 +23,7 @@ router.use(function (req, res, next) {
         console.log(data);
         //没有expire_in值--此data是redis中获取到的
         if (!data.expires_in) {
-            console.log('redis获取到值');            
+            console.log('redis获取到值');
             req.accessToken = data;
             global.accessToken = data;
             next();
@@ -47,20 +48,48 @@ router.use(function (req, res, next) {
     })
 })
 
-router.use(function(req, res, next){
-    wechatapi.upJsapiTicket().then((data)=>{
+
+//获得jsapi_ticket
+router.use(function (req, res, next) {
+    wechatapi.upJsapiTicket().then((data) => {
         let res = JSON.parse(data);
-        if(!!res.ticket){
+        if (!!res.ticket) {
             global.jsapiTicket = res.ticket;
             next();
         }
     })
 })
 
+//签名
+router.use(function (req, res, next) {
+    const params = {
+        nonceStr: Math.random().toString(36).substr(2, 15),
+        jsapi_ticket: global.jsapiTicket,
+        timestamp: parseInt(Date.now() / 1000),
+        url: req.query.url
+    }
+    const string1 = Object.keys(params).sort().map(key => `${key.toLowerCase()}=${params[key]}`).join('&')
+    const signature = sha1(string1)
+    req.nonceStr = params.nonceStr;
+    req.timestamp = params.timestamp;
+    req.signature = signature;
+    next();
+})
+
 //微信将很多事件推送到此接口
 router.post('/test', function (req, res, next) {
     //微信得到返回后会通过你的认证
-    res.status(200).send('wechat');
+    res.status(200).json({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: 'wxdc81871941aafe37', // 必填，公众号的唯一标识
+        timestamp: req.timestamp, // 必填，生成签名的时间戳
+        nonceStr: req.nonceStr, // 必填，生成签名的随机串
+        signature: req.signature,// 必填，签名
+        jsApiList: [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+        ] // 必填，需要使用的JS接口列表
+    });
 });
 
 
