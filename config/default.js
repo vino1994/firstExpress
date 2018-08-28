@@ -5,7 +5,6 @@ module.exports = {
         key: 'vino',
         maxAge: 2592000000
     },
-    mongodb: '',
     wechat : {
         "appID": "wxdc81871941aafe37",
         "appSecret": "b34bd87018e96b76e01e8e9a4fe89fbb",

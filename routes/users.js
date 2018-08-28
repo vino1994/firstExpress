@@ -1,11 +1,16 @@
 const express = require('express')
+const mysql = require('../public/mysql.js');
 const router = express.Router()
 
-//写个接口
+let sql = 'select * from test_tbl', sqlParams = {};
+//test
 router.get('/test', function (req, res) {
-    let questions = [{ data: 213, num: 444, age: 12 }, { data: 456, num: 678, age: 13 }];
-    res.status(200),
-        res.json(questions)
+    async function a() {
+        let data = await mysql.row(sql, sqlParams);
+        res.status(200);
+        res.json(data);
+    }
+    a();
 });
 
 module.exports = router

@@ -1,14 +1,13 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const config = require('config-lite')(__dirname);
 const utils = require('./common/utils');
+const log4js= require('./config/log4jsConfig');
 
 var app = express();
-
 //设置跨域访问
 app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -23,9 +22,9 @@ app.all('*', function (req, res, next) {
     }
 });
 
+//自动记录每次请求信息，放在其他use上面
+log4js.useLogger(app,errlogger)
 
-//使用上面引入的包
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -41,27 +40,7 @@ app.set('view engine', 'ejs');
 //微信签名认证
 app.use(utils.sign(config.wechat))
 
-
-// 最后处理错误的http请求
-// catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//     var err = new Error('Not Found');
-//     err.status = 404;
-//     next(err);
-// });
-
-// // error handler
-// app.use(function (err, req, res, next) {
-//     // set locals, only providing error in development
-//     res.locals.message = err.message;
-//     res.locals.error = req.app.get('env') === 'development' ? err : {};
-//     // render the error page
-//     res.status(err.status || 500);
-//     res.render('error');
-// });
-
 //配置服务端口
-
 let server = app.listen(config.port, function () {
     let host = server.address().address;
     let port = server.address().port;
