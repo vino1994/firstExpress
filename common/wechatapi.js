@@ -15,13 +15,11 @@ var api = {
 //获取access_token
 wechatApi.updateAccessToken = function () {
     var url = `${api.accessToken}&appid=${appID}&secret=${appSecret}`;
-    //console.log(url);
     var option = {
         url: url,
         json: true
     };
     return utils.request(option).then(function (data) {
-
         return Promise.resolve(data);
     })
 }

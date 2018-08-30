@@ -17,7 +17,7 @@ router.use(function (req, res, next) {
         }
         //没获取到值--从微信服务器端获取,并往下传递
         else {
-            return require('../common/wechatapi').updateAccessToken();
+            return wechatapi.updateAccessToken();
         }
     }).then(function (data) {
         console.log(data);
