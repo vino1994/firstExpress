@@ -103,6 +103,7 @@ router.post('/test', function (req, res, next) {
             'chooseImage',
             'previewImage',
             'uploadImage',
+            'getLocalImgData',
             'downloadImage',
             'translateVoice',
             'getNetworkType',
