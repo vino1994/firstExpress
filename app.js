@@ -23,7 +23,7 @@ app.all('*', function (req, res, next) {
 });
 
 //自动记录每次请求信息，放在其他use上面
-log4js.useLogger(app,errlogger)
+log4js.useLogger(app)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
