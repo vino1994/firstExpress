@@ -34,5 +34,7 @@
     "winston": "^3.0.0",
     "xml2js": "^0.4.19"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "baidu-aip-sdk": "^2.3.3"
+  }
 }
